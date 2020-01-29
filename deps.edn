@@ -1,0 +1,19 @@
+{:paths   ["src"]
+ :deps    {orchestra                        {:mvn/version "2019.02.06-1"}
+           provisdom/utility-belt           {:git/url "https://github.com/Provisdom/utility-belt.git"
+                                             :sha     "aa1092372d282f7e360955afc0513cdaf8e20af3"}
+           provisdom/math                   {:git/url "https://github.com/Provisdom/math.git"
+                                             :sha     "26d5675aac0ae815a21cc5fd0cb3db28ad3f7ad6"}
+           org.apache.commons/commons-math3 {:mvn/version "3.6.1"}}
+ :aliases {:dev         {:extra-paths ["siderail"]}
+           :test        {:extra-paths ["test" "siderail"]
+                         :extra-deps  {criterium                  {:mvn/version "0.4.5"}
+                                       org.clojure/test.check     {:mvn/version "0.10.0"}
+                                       provisdom/test             {:git/url "https://github.com/Provisdom/test.git"
+                                                                   :sha     "7f403360348fbb603a6d2212c164afcb2a6035e6"}
+                                       com.cognitect/transcriptor {:mvn/version "0.1.5"}
+                                       com.cognitect/test-runner  {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                                                                   :sha     "cb96e80f6f3d3b307c59cbeb49bb0dcb3a2a780b"}}}
+           :test-runner {:extra-deps {lambdaisland/kaocha           {:mvn/version "0.0-554"}
+                                      lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}
+                         :main-opts  ["-m" "kaocha.runner"]}}}
