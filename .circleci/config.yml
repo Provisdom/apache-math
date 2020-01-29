@@ -2,7 +2,7 @@ version: 2.1
 
 defaults: &defaults
   docker:
-    - image: computesoftware/java-neanderthal:c7fb0781c306c1af91545165411f0535d870cc3c-tools-deps
+    - image: computesoftware/adoptopenjdk-11:tools-deps-1.10.1.502
 
 orbs:
   cache: compute/cache@0.0.3
@@ -13,7 +13,9 @@ jobs:
 
     steps:
       - checkout
-      - run: clojure -J-Xmx3500m -A:test
+      - run:
+          name: Run tests
+          command: clojure -J-Xmx3500m -A:test:test-runner --reporter kaocha.report/documentation --plugin profiling
 
 workflows:
   version: 2
