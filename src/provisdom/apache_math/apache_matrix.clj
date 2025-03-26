@@ -1033,7 +1033,7 @@
 (defn rectangular-cholesky-decomposition
   "Calculates the rectangular Cholesky decomposition of a positive semidefinite
   Apache Commons matrix. The rectangular Cholesky decomposition of a real
-  `possemidefinite-apache-m` consists of a `rectangular-root` matrix with
+  `pos-semidefinite-apache-m` consists of a `rectangular-root` matrix with
   the same number of rows such that `pos-semidefinite-apache-m` is almost
   equal to `rectangular-root` × (transpose `rectangular-root`), depending on a
   user-defined tolerance. In a sense, this is the square root of
