@@ -290,8 +290,8 @@
            (apache-mx/->apache-matrix [[1 2] [3 4]])))))
 
 (deftest pos-definite-apache-matrix-finite-by-squaring-test
-  (with-instrument `apache-mx/pos-definite-apache-matrix-finite-by-squaring
-    (is (spec-check apache-mx/pos-definite-apache-matrix-finite-by-squaring)))
+  (with-instrument `apache-mx/positive-definite-apache-matrix-finite-by-squaring
+    (is (spec-check apache-mx/positive-definite-apache-matrix-finite-by-squaring)))
   (with-instrument (st/instrumentable-syms)
     (is= (apache-mx/->apache-matrix [[]])
          (apache-mx/positive-definite-apache-matrix-finite-by-squaring

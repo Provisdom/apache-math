@@ -20,7 +20,7 @@
 (declare
   apache-matrix? apache-square-matrix? ->apache-matrix eigen-decomposition
   rrqr-decomposition rows columns === transpose
-  pos-definite-apache-matrix-finite-by-squaring
+  positive-definite-apache-matrix-finite-by-squaring
   pos-semidefinite-apache-matrix-finite-by-squaring diagonal mx* add
   covariance-apache-matrix->correlation-apache-matrix
   correlation-apache-matrix-by-squaring some-kv get-entry assoc-entry!
@@ -198,11 +198,11 @@
   :args (s/cat :x any? :accu ::m/accu)
   :ret boolean?)
 
-(s/def ::pos-definite-apache-matrix-finite
+(s/def ::positive-definite-apache-matrix-finite
   (s/with-gen
     #(positive-definite-apache-matrix-finite? % m/sgl-close)
     #(gen/fmap (fn [m]
-                 (pos-definite-apache-matrix-finite-by-squaring
+                 (positive-definite-apache-matrix-finite-by-squaring
                    (->apache-matrix m)))
                (s/gen ::mx/square-matrix-finite))))
 
@@ -310,7 +310,7 @@
 
 (s/fdef positive-definite-apache-matrix-finite-by-squaring
   :args (s/cat :square-apache-m-finite ::square-apache-matrix-finite)
-  :ret (s/nilable ::pos-definite-apache-matrix-finite))
+  :ret (s/nilable ::positive-definite-apache-matrix-finite))
 
 (defn correlation-apache-matrix-by-squaring
   "Returns a finite Correlation Apache Commons matrix by first squaring
@@ -359,7 +359,7 @@
 
 (s/fdef rnd-positive-definite-apache-matrix-finite!
   :args (s/cat :size ::vector/size)
-  :ret ::pos-definite-apache-matrix-finite)
+  :ret ::positive-definite-apache-matrix-finite)
 
 (defn rnd-correlation-apache-matrix!
   "Returns a correlation Apache Commons matrix from a covariance matrix
@@ -759,7 +759,7 @@
 (s/fdef correlation-apache-matrix->covariance-apache-matrix
   :args (s/cat :correlation-apache-matrix ::correlation-apache-matrix
                :variances ::vector/vector-finite+)
-  :ret (s/nilable ::pos-definite-apache-matrix-finite))
+  :ret (s/nilable ::positive-definite-apache-matrix-finite))
 
 (defn covariance-apache-matrix->correlation-apache-matrix
   "Returns Correlation Apache Commons matrix from a Covariance Apache Commons
@@ -778,7 +778,7 @@
         corr))))
 
 (s/fdef covariance-apache-matrix->correlation-apache-matrix
-  :args (s/cat :covariance-apache-matrix ::pos-definite-apache-matrix-finite)
+  :args (s/cat :covariance-apache-matrix ::positive-definite-apache-matrix-finite)
   :ret (s/nilable ::correlation-apache-matrix))
 
 ;;;MATRIX MATH
@@ -1024,7 +1024,7 @@
             ::anomalies/category ::anomalies/third-party}))))
 
 (s/fdef cholesky-decomposition
-  :args (s/cat :positive-definite-apache-m ::pos-definite-apache-matrix-finite)
+  :args (s/cat :positive-definite-apache-m ::positive-definite-apache-matrix-finite)
   :ret (s/or :anomaly ::anomalies/anomaly
              :res (s/keys :req [::cholesky-L ::cholesky-LT])))
 
