@@ -1,7 +1,7 @@
 {:paths   ["src"]
  :deps    {org.apache.commons/commons-math3 {:mvn/version "3.6.1"}
            provisdom/math                   {:git/url "https://github.com/Provisdom/math.git"
-                                             :sha     "564f208441cd4cc4536ae69dbc4872040af05a2e"}
+                                             :sha     "469dcb77baa30f32ea134ab5a2146cc1801baae3"}
            provisdom/utility-belt           {:git/url "https://github.com/Provisdom/utility-belt.git"
                                              :sha     "efdbcff8a2f15fe20d5b969655f19fbf7f42b680"}}
  :aliases {:dev         {:extra-paths ["siderail"]}
