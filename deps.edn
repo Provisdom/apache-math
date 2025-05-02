@@ -1,9 +1,9 @@
 {:paths   ["src"]
  :deps    {org.apache.commons/commons-math3 {:mvn/version "3.6.1"}
            provisdom/math                   {:git/url "https://github.com/Provisdom/math.git"
-                                             :sha     "702e20c6724accf2d9080ca0e1588ac9f653814e"}
+                                             :sha     "31fd993e4480fd9b1a2ff447d69110153ce4e91c"}
            provisdom/utility-belt           {:git/url "https://github.com/Provisdom/utility-belt.git"
-                                             :sha     "a192a865a38322d5c7e5f6109d2e0ed4e525fc13"}}
+                                             :sha     "30014cb3c7d3fd92cb22f6374ed8ce289c23843c"}}
  :aliases {:dev         {:extra-paths ["siderail"]}
            :test        {:extra-paths ["test" "siderail"]
                          :extra-deps  {com.cognitect/transcriptor {:mvn/version "0.1.5"}
