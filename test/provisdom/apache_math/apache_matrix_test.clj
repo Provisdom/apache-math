@@ -129,88 +129,89 @@
     (is-not (apache-mx/symmetric-apache-matrix?
               (apache-mx/->apache-matrix [[1 0] [1 1]])))))
 
-(deftest positive-semidefinite-apache-matrix-finite?-test
-  (with-instrument `apache-mx/positive-semidefinite-apache-matrix-finite?
-    (is (spec-check apache-mx/positive-semidefinite-apache-matrix-finite?)))
+(deftest pos-semidefinite-apache-matrix-finite?-test
+  (with-instrument `apache-mx/pos-semidefinite-apache-matrix-finite?
+    (is (spec-check apache-mx/pos-semidefinite-apache-matrix-finite?)))
   (with-instrument (st/instrumentable-syms)
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[0.0]])
           m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0]])
           m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[0.0 0.0] [0.0 0.0]])
           m/dbl-close))
-    (is-not (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is-not (apache-mx/pos-semidefinite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])
               m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 0.5] [0.5 2.0]])
           m/dbl-close))
-    (is-not (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is-not (apache-mx/pos-semidefinite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 -1.1] [-1.1 1.0]])
               m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 (m/next-down -1.0)]
                                       [(m/next-down -1.0) 1.0]])
           m/dbl-close))
-    (is-not (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is-not (apache-mx/pos-semidefinite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 (+ -1.0 -1.0E-14)]
                                           [(+ -1.0 -1.0E-14) 1.0]])
               m/dbl-close))
-    (is (apache-mx/positive-semidefinite-apache-matrix-finite?
+    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 (+ -1.0 -1.0E-14)]
                                       [(+ -1.0 -1.0E-14) 1.0]])
           m/sgl-close))))
 
-(deftest positive-definite-apache-matrix-finite?-test
-  (with-instrument `apache-mx/positive-definite-apache-matrix-finite?
-    (is (spec-check apache-mx/positive-definite-apache-matrix-finite?)))
+(deftest pos-definite-apache-matrix-finite?-test
+  (with-instrument `apache-mx/pos-definite-apache-matrix-finite?
+    (is (spec-check apache-mx/pos-definite-apache-matrix-finite?)))
   (with-instrument (st/instrumentable-syms)
-    (is (apache-mx/positive-definite-apache-matrix-finite?
+    (is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[0.0]])
               m/sgl-close))
-    (is (apache-mx/positive-definite-apache-matrix-finite?
+    (is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0]])
           m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[0.0 0.0] [0.0 0.0]])
               m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])
               m/sgl-close))
-    (is (apache-mx/positive-definite-apache-matrix-finite?
+    (is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 0.5] [0.5 1.0]])
           m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 -1.1] [-1.1 1.0]])
               m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
               m/sgl-close))
-    (is (apache-mx/positive-definite-apache-matrix-finite?
+    (is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           1e-40))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[(m/next-up 1.0) -1.0]
                                           [-1.0 (m/next-up 1.0)]])
               m/sgl-close))
-    (is-not (apache-mx/positive-definite-apache-matrix-finite?
+    (is-not (apache-mx/pos-definite-apache-matrix-finite?
               (apache-mx/->apache-matrix [[(inc 1.0E-14) -1.0]
                                           [-1.0 (inc 1.0E-14)]])
               m/sgl-close))
-    (is (apache-mx/positive-definite-apache-matrix-finite?
-          (apache-mx/->apache-matrix [[(inc 1.0E-14) -1.0] [-1.0 (inc 1.0E-14)]])
+    (is (apache-mx/pos-definite-apache-matrix-finite?
+          (apache-mx/->apache-matrix
+            [[(inc 1.0E-14) -1.0] [-1.0 (inc 1.0E-14)]])
           m/dbl-close))))
 
 (deftest correlation-apache-matrix?-test
@@ -290,18 +291,18 @@
            (apache-mx/->apache-matrix [[1 2] [3 4]])))))
 
 (deftest pos-definite-apache-matrix-finite-by-squaring-test
-  (with-instrument `apache-mx/positive-definite-apache-matrix-finite-by-squaring
-    (is (spec-check apache-mx/positive-definite-apache-matrix-finite-by-squaring)))
+  (with-instrument `apache-mx/pos-definite-apache-matrix-finite-by-squaring
+    (is (spec-check apache-mx/pos-definite-apache-matrix-finite-by-squaring)))
   (with-instrument (st/instrumentable-syms)
     (is= (apache-mx/->apache-matrix [[]])
-         (apache-mx/positive-definite-apache-matrix-finite-by-squaring
+         (apache-mx/pos-definite-apache-matrix-finite-by-squaring
            (apache-mx/->apache-matrix [[]])))
     (is= (apache-mx/->apache-matrix [[4]])
-         (apache-mx/positive-definite-apache-matrix-finite-by-squaring
+         (apache-mx/pos-definite-apache-matrix-finite-by-squaring
            (apache-mx/->apache-matrix [[2]])))
     (is= [[1.0E-4 3.0E-17] [3.0E-17 1.0000000000008E-4]]
          (apache-mx/apache-matrix->matrix
-           (apache-mx/positive-definite-apache-matrix-finite-by-squaring
+           (apache-mx/pos-definite-apache-matrix-finite-by-squaring
              (apache-mx/->apache-matrix [[0 0] [3 4]]))))))
 
 (deftest correlation-apache-matrix-by-squaring-test
@@ -323,20 +324,21 @@
            (apache-mx/correlation-apache-matrix-by-squaring
              (apache-mx/->apache-matrix [[0 0] [3 4]]))))))
 
-(deftest rnd-positive-definite-apache-matrix-finite!-test
-  (with-instrument `apache-mx/rnd-positive-definite-apache-matrix-finite!
-    (is (spec-check apache-mx/rnd-positive-definite-apache-matrix-finite!)))
+(deftest rnd-pos-definite-apache-matrix-finite!-test
+  (with-instrument `apache-mx/rnd-pos-definite-apache-matrix-finite!
+    (is (spec-check apache-mx/rnd-pos-definite-apache-matrix-finite!)))
   (with-instrument (st/instrumentable-syms)
     (random/bind-seed 0
       (is= (apache-mx/->apache-matrix [[]])
-           (apache-mx/rnd-positive-definite-apache-matrix-finite! 0)))
+           (apache-mx/rnd-pos-definite-apache-matrix-finite! 0)))
     (random/bind-seed 0
       (is= (apache-mx/->apache-matrix [[0.8833108082136426]])
-           (apache-mx/rnd-positive-definite-apache-matrix-finite! 1)))
+           (apache-mx/rnd-pos-definite-apache-matrix-finite! 1)))
     (random/bind-seed 0
-      (is= (apache-mx/->apache-matrix [[0.6946098792362991 0.3550851337817903]
-                                       [0.3550851337817903 0.21513470056994127]])
-           (apache-mx/rnd-positive-definite-apache-matrix-finite! 2)))))
+      (is= (apache-mx/->apache-matrix
+             [[0.6946098792362991 0.3550851337817903]
+              [0.3550851337817903 0.21513470056994127]])
+           (apache-mx/rnd-pos-definite-apache-matrix-finite! 2)))))
 
 (deftest rnd-correlation-apache-matrix!-test
   (with-instrument `apache-mx/rnd-correlation-apache-matrix!

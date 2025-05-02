@@ -19,8 +19,9 @@
 
 (declare
   apache-matrix? apache-square-matrix? ->apache-matrix eigen-decomposition
+  cholesky-decomposition lu-decomposition-with-determinant-and-inverse
   rrqr-decomposition rows columns === transpose
-  positive-definite-apache-matrix-finite-by-squaring
+  pos-definite-apache-matrix-finite-by-squaring
   pos-semidefinite-apache-matrix-finite-by-squaring diagonal mx* add
   covariance-apache-matrix->correlation-apache-matrix
   correlation-apache-matrix-by-squaring some-kv get-entry assoc-entry!
@@ -162,9 +163,9 @@
     symmetric-apache-matrix?
     #(gen/fmap ->apache-matrix (s/gen ::mx/symmetric-matrix))))
 
-(defn positive-semidefinite-apache-matrix-finite?
-  "Returns true if a finite positive-semidefinite Apache matrix. Larger `accu`
-  creates more false positives and less false negatives."
+(defn pos-semidefinite-apache-matrix-finite?
+  "Returns true if a finite `::pos-semidefinite-apache-matrix-finite`. Larger
+  `accu` creates more false positives and less false negatives."
   [x accu]
   (and (symmetric-apache-matrix? x)
        (apache-matrix-finite? x)
@@ -172,46 +173,48 @@
                (try (::eigenvalues (eigen-decomposition x))
                     (catch Exception _ nil)))))
 
-(s/fdef positive-semidefinite-apache-matrix-finite?
+(s/fdef pos-semidefinite-apache-matrix-finite?
   :args (s/cat :x any? :accu ::m/accu)
   :ret boolean?)
 
 (s/def ::pos-semidefinite-apache-matrix-finite
   (s/with-gen
-    #(positive-semidefinite-apache-matrix-finite? % m/sgl-close)
+    #(pos-semidefinite-apache-matrix-finite? % m/sgl-close)
     #(gen/fmap (fn [m]
                  (pos-semidefinite-apache-matrix-finite-by-squaring
                    (->apache-matrix m)))
                (s/gen ::mx/square-matrix-finite))))
 
-(defn positive-definite-apache-matrix-finite?
-  "Returns true if a finite positive definite Apache matrix. Larger `accu`
+(defn pos-definite-apache-matrix-finite?
+  "Returns true if a `::pos-definite-apache-matrix-finite`. Larger `accu`
   creates more false negatives and less false positives."
   [x accu]
   (and (symmetric-apache-matrix? x)
        (apache-matrix-finite? x)
        (every? #(> % accu)
                (try (::eigenvalues (eigen-decomposition x))
-                    (catch Exception _ nil)))))
+                    (catch Exception _ nil)))
+       (not (anomalies/anomaly? (cholesky-decomposition x)))
+       (::inverse (lu-decomposition-with-determinant-and-inverse x))))
 
-(s/fdef positive-definite-apache-matrix-finite?
+(s/fdef pos-definite-apache-matrix-finite?
   :args (s/cat :x any? :accu ::m/accu)
   :ret boolean?)
 
-(s/def ::positive-definite-apache-matrix-finite
+(s/def ::pos-definite-apache-matrix-finite
   (s/with-gen
-    #(positive-definite-apache-matrix-finite? % m/sgl-close)
+    #(pos-definite-apache-matrix-finite? % m/sgl-close)
     #(gen/fmap (fn [m]
-                 (positive-definite-apache-matrix-finite-by-squaring
+                 (pos-definite-apache-matrix-finite-by-squaring
                    (->apache-matrix m)))
                (s/gen ::mx/square-matrix-finite))))
 
 (defn correlation-apache-matrix?
-  "Returns true if a finite positive definite Apache Commons matrix with a unit
+  "Returns true if a `::pos-definite-apache-matrix-finite` with a unit
   diagonal. Larger `accu` creates more false negatives and less false
   positives."
   [x accu]
-  (and (positive-definite-apache-matrix-finite? x accu)
+  (and (pos-definite-apache-matrix-finite? x accu)
        (every? m/one? (diagonal x))))
 
 (s/fdef correlation-apache-matrix?
@@ -256,7 +259,7 @@
   :ret ::mx/matrix)
 
 (defn pos-semidefinite-apache-matrix-finite-by-squaring
-  "Returns a finite positive semidefinite Apache Commons matrix by first
+  "Returns a `::pos-semidefinite-apache-matrix-finite` by first
   squaring `square-apache-m-finite`."
   [square-apache-m-finite]
   (let [size (rows square-apache-m-finite)
@@ -271,7 +274,7 @@
                                  (repeat size (m/pow 10 (m/one- (m/pow 2 i)))))))
                 lower-m (mx* lower-m (transpose lower-m))
                 _ (symmetric-apache-matrix-by-averaging! lower-m)]
-            (if (positive-semidefinite-apache-matrix-finite?
+            (if (pos-semidefinite-apache-matrix-finite?
                   lower-m m/sgl-close)
               lower-m
               (recur (inc i)))))))))
@@ -280,8 +283,8 @@
   :args (s/cat :square-apache-m-finite ::square-apache-matrix-finite)
   :ret (s/nilable ::pos-semidefinite-apache-matrix-finite))
 
-(defn positive-definite-apache-matrix-finite-by-squaring
-  "Returns a finite positive definite Apache Commons matrix squaring it. Will
+(defn pos-definite-apache-matrix-finite-by-squaring
+  "Returns a `::pos-definite-apache-matrix-finite` squaring it. Will
   tweak original matrix if necessary to ensure positive definite."
   [square-apache-m-finite]
   (let [size (rows square-apache-m-finite)
@@ -304,13 +307,13 @@
                                              (m/pow 10 (- i m/sgl-digits))))))))
                 lower-m (mx* lower-m (transpose lower-m))
                 _ (symmetric-apache-matrix-by-averaging! lower-m)]
-            (if (positive-definite-apache-matrix-finite? lower-m m/sgl-close)
+            (if (pos-definite-apache-matrix-finite? lower-m m/sgl-close)
               lower-m
               (recur (inc i)))))))))
 
-(s/fdef positive-definite-apache-matrix-finite-by-squaring
+(s/fdef pos-definite-apache-matrix-finite-by-squaring
   :args (s/cat :square-apache-m-finite ::square-apache-matrix-finite)
-  :ret (s/nilable ::positive-definite-apache-matrix-finite))
+  :ret (s/nilable ::pos-definite-apache-matrix-finite))
 
 (defn correlation-apache-matrix-by-squaring
   "Returns a finite Correlation Apache Commons matrix by first squaring
@@ -319,7 +322,7 @@
   (if (zero? (rows square-apache-m-finite))
     square-apache-m-finite
     (let [new-m (covariance-apache-matrix->correlation-apache-matrix
-                  (positive-definite-apache-matrix-finite-by-squaring
+                  (pos-definite-apache-matrix-finite-by-squaring
                     square-apache-m-finite))
           size (when new-m (rows new-m))]
       (when new-m
@@ -338,13 +341,13 @@
   :args (s/cat :square-apache-m-finite ::square-apache-matrix-finite)
   :ret (s/nilable ::correlation-apache-matrix))
 
-(defn rnd-positive-definite-apache-matrix-finite!
-  "Returns a finite positive definite Apache Commons matrix with a random
+(defn rnd-pos-definite-apache-matrix-finite!
+  "Returns a `::pos-definite-apache-matrix-finite` with a random
   spectrum. The orthogonal matrices are generated by using 2 × `size` composed
   Householder reflections.
   Alternative #1: Sample from the Inverse-Wishart Distribution.
-  Alternative #2: Use [[positive-definite-apache-matrix-finite-by-squaring]]
-   with a random square matrix."
+  Alternative #2: Use [[pos-definite-apache-matrix-finite-by-squaring]] with a
+  random square matrix."
   [size]
   (if (zero? size)
     (->apache-matrix [[]])
@@ -353,13 +356,13 @@
         (let [m (->apache-matrix
                   (mx/rnd-spectral-matrix!
                     (vec (take size (random/rnd-lazy!)))))]
-          (if (positive-definite-apache-matrix-finite? m m/sgl-close)
+          (if (pos-definite-apache-matrix-finite? m m/sgl-close)
             m
             (recur (inc i))))))))
 
-(s/fdef rnd-positive-definite-apache-matrix-finite!
+(s/fdef rnd-pos-definite-apache-matrix-finite!
   :args (s/cat :size ::vector/size)
-  :ret ::positive-definite-apache-matrix-finite)
+  :ret ::pos-definite-apache-matrix-finite)
 
 (defn rnd-correlation-apache-matrix!
   "Returns a correlation Apache Commons matrix from a covariance matrix
@@ -372,7 +375,7 @@
   (if (zero? size)
     (->apache-matrix [[]])
     (covariance-apache-matrix->correlation-apache-matrix
-      (rnd-positive-definite-apache-matrix-finite! size))))
+      (rnd-pos-definite-apache-matrix-finite! size))))
 
 (s/fdef rnd-correlation-apache-matrix!
   :args (s/cat :size ::vector/size)
@@ -753,13 +756,13 @@
                        (mapv m/sqrt variances)))
             cov (mx* sqrt-m correlation-apache-matrix sqrt-m)
             _ (symmetric-apache-matrix-by-averaging! cov)]
-        (when (positive-definite-apache-matrix-finite? cov m/sgl-close)
+        (when (pos-definite-apache-matrix-finite? cov m/sgl-close)
           cov)))))
 
 (s/fdef correlation-apache-matrix->covariance-apache-matrix
   :args (s/cat :correlation-apache-matrix ::correlation-apache-matrix
                :variances ::vector/vector-finite+)
-  :ret (s/nilable ::positive-definite-apache-matrix-finite))
+  :ret (s/nilable ::pos-definite-apache-matrix-finite))
 
 (defn covariance-apache-matrix->correlation-apache-matrix
   "Returns Correlation Apache Commons matrix from a Covariance Apache Commons
@@ -778,7 +781,7 @@
         corr))))
 
 (s/fdef covariance-apache-matrix->correlation-apache-matrix
-  :args (s/cat :covariance-apache-matrix ::positive-definite-apache-matrix-finite)
+  :args (s/cat :covariance-apache-matrix ::pos-definite-apache-matrix-finite)
   :ret (s/nilable ::correlation-apache-matrix))
 
 ;;;MATRIX MATH
@@ -889,6 +892,7 @@
 
 ;;;MATRIX DECOMPOSITION
 (s/def ::inverse (s/nilable ::square-apache-matrix))
+
 (defn inverse
   "Returns the inverse of a square Apache Commons matrix. Uses QR Decomposition
   by default but will use other methods depending on matrix structure."
@@ -1004,18 +1008,19 @@
 (s/def ::cholesky-L ::lower-triangular-apache-matrix)
 (s/def ::cholesky-LT ::upper-triangular-apache-matrix)
 (defn cholesky-decomposition
-  "Computes the Cholesky decomposition of a positive definite Apache Commons
-  matrix. Returns a map of two Apache Commons matrices `::cholesky-L` and
-  `::choleskyLT`. This is the Cholesky square root of a matrix, 'L' and 'LT'
-  such that `positive-definite-apache-m` = L × LT. Note that
-  `positive-definite-apache-m` must be positive semidefinite for this to exist,
-  but [[cholesky-decomposition]] requires strict positivity."
-  [positive-definite-apache-m]
-  (if (zero? (rows positive-definite-apache-m))
-    {::cholesky-L  positive-definite-apache-m
-     ::cholesky-LT positive-definite-apache-m}
+  "Computes the Cholesky decomposition of a
+  `::pos-definite-apache-matrix-finite`. Returns a map of two Apache Commons
+  matrices `::cholesky-L` and `::choleskyLT`. This is the Cholesky square root
+  of a matrix, 'L' and 'LT' such that
+  ``::pos-definite-apache-matrix-finite` = L × LT. Note that
+  `::pos-definite-apache-matrix-finite` must be positive semidefinite for this
+  to exist, but [[cholesky-decomposition]] requires strict positivity."
+  [pos-definite-apache-m]
+  (if (zero? (rows pos-definite-apache-m))
+    {::cholesky-L  pos-definite-apache-m
+     ::cholesky-LT pos-definite-apache-m}
     (try (let [r (CholeskyDecomposition.
-                   ^Array2DRowRealMatrix positive-definite-apache-m)]
+                   ^Array2DRowRealMatrix pos-definite-apache-m)]
            {::cholesky-L  (.getL r)
             ::cholesky-LT (.getLT r)})
          (catch Exception e
@@ -1024,21 +1029,22 @@
             ::anomalies/category ::anomalies/third-party}))))
 
 (s/fdef cholesky-decomposition
-  :args (s/cat :positive-definite-apache-m ::positive-definite-apache-matrix-finite)
+  :args (s/cat :pos-definite-apache-m ::pos-definite-apache-matrix-finite)
   :ret (s/or :anomaly ::anomalies/anomaly
              :res (s/keys :req [::cholesky-L ::cholesky-LT])))
 
 (s/def ::rectangular-root ::apache-matrix)
 
 (defn rectangular-cholesky-decomposition
-  "Calculates the rectangular Cholesky decomposition of a positive semidefinite
-  Apache Commons matrix. The rectangular Cholesky decomposition of a real
-  `pos-semidefinite-apache-m` consists of a `rectangular-root` matrix with
-  the same number of rows such that `pos-semidefinite-apache-m` is almost
-  equal to `rectangular-root` × (transpose `rectangular-root`), depending on a
+  "Calculates the rectangular Cholesky decomposition of a
+  `::pos-semidefinite-apache-matrix-finite`. The rectangular Cholesky
+  decomposition of a real ::pos-semidefinite-apache-matrix-finite consists of a
+  `rectangular-root` matrix with the same number of rows such that
+  ::pos-semidefinite-apache-matrix-finite is almost equal to
+  `rectangular-root` × (transpose `rectangular-root`), depending on a
   user-defined tolerance. In a sense, this is the square root of
-  `pos-semidefinite-apache-m`. The difference with respect to the regular
-  CholeskyDecomposition is that rows/columns may be permuted (hence the
+  ::pos-semidefinite-apache-matrix-finite. The difference with respect to the
+  regular CholeskyDecomposition is that rows/columns may be permuted (hence the
   rectangular shape instead of the traditional triangular shape) and there is a
   threshold to ignore small diagonal elements. This is used for example to
   generate correlated random n-dimensions vectors in a p-dimension subspace
