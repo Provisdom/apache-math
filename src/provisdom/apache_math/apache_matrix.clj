@@ -195,7 +195,7 @@
                (try (::eigenvalues (eigen-decomposition x))
                     (catch Exception _ nil)))
        (not (anomalies/anomaly? (cholesky-decomposition x)))
-       (::inverse (lu-decomposition-with-determinant-and-inverse x))))
+       (some? (::inverse (lu-decomposition-with-determinant-and-inverse x)))))
 
 (s/fdef pos-definite-apache-matrix-finite?
   :args (s/cat :x any? :accu ::m/accu)
