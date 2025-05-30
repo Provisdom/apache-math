@@ -1,17 +1,19 @@
 {:paths   ["src"]
  :deps    {org.apache.commons/commons-math3 {:mvn/version "3.6.1"}
            provisdom/math                   {:git/url "https://github.com/Provisdom/math.git"
-                                             :sha     "31fd993e4480fd9b1a2ff447d69110153ce4e91c"}
+                                             :sha     "231fc186e6cc8feae74d1cd6c7b3705ba011bf65"}
            provisdom/utility-belt           {:git/url "https://github.com/Provisdom/utility-belt.git"
-                                             :sha     "30014cb3c7d3fd92cb22f6374ed8ce289c23843c"}}
+                                             :sha     "aff01e33b93bd0090f6918b631b2ae1503b18ecb"}}
  :aliases {:dev         {:extra-paths ["siderail"]}
+           :local           {:override-deps {provisdom/math         {:local/root "../math"}
+                                             provisdom/utility-belt {:local/root "../utility-belt"}}}
            :test        {:extra-paths ["test" "siderail"]
                          :extra-deps  {com.cognitect/transcriptor {:mvn/version "0.1.5"}
                                        criterium/criterium        {:mvn/version "0.4.6"}
                                        orchestra/orchestra        {:mvn/version "2021.01.01-1"}
                                        org.clojure/test.check     {:mvn/version "1.1.1"}
                                        provisdom/test             {:git/url "https://github.com/Provisdom/test.git"
-                                                                   :sha     "ec0b531bf0e5a8b5897a8dde332bd08d478578f4"}}}
+                                                                   :sha     "f62afc093223dff1830a0142bd076ab89cbdef6c"}}}
            :test-runner {:extra-deps {lambdaisland/kaocha           {:mvn/version "1.91.1392"}
                                       lambdaisland/kaocha-junit-xml {:mvn/version "1.17.101"}}
                          :main-opts  ["-m" "kaocha.runner"]}}}
