@@ -84,3 +84,9 @@
 (s/fdef apache-vector->vector
   :args (s/cat :apache-v ::apache-vector)
   :ret ::vector/vector)
+
+;;;APACHE VECTOR PRINTING
+(defmethod print-method ArrayRealVector
+  [apache-v ^java.io.Writer w]
+  (.write w "#apache-math/vector ")
+  (print-method (apache-vector->vector apache-v) w))

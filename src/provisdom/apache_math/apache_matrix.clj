@@ -325,6 +325,12 @@
   :args (s/cat :apache-m ::apache-matrix)
   :ret ::mx/matrix)
 
+;;;APACHE MATRIX PRINTING
+(defmethod print-method Array2DRowRealMatrix
+  [apache-m ^java.io.Writer w]
+  (.write w "#apache-math/matrix ")
+  (print-method (apache-matrix->matrix apache-m) w))
+
 (defn pos-semidefinite-apache-matrix-finite-by-squaring
   "Returns a `::pos-semidefinite-apache-matrix-finite` by first
   squaring `square-apache-m-finite`."
