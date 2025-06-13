@@ -1,4 +1,20 @@
 (ns provisdom.apache-math.apache-matrix
+  "High-performance matrix operations using Apache Commons Math.
+  
+  Provides comprehensive matrix operations including:
+  - Matrix creation, conversion, and manipulation
+  - Linear algebra: multiplication, addition, transpose, inverse
+  - Matrix decompositions: LU, QR, Cholesky, SVD, Eigenvalue
+  - Specialized matrix types: positive definite, correlation, symmetric
+  - Matrix properties: rank, determinant, trace, condition number
+  
+  Built on Apache Commons Math Array2DRowRealMatrix for performance.
+  Handles edge cases like empty matrices and provides comprehensive error handling.
+  
+  Example usage:
+    (def m (->apache-matrix [[1 2] [3 4]]))
+    (def inv (inverse m))
+    (mx* m inv) ;=> approximately identity matrix"
   (:require
     [clojure.spec.alpha :as s]
     [clojure.spec.gen.alpha :as gen]
@@ -186,8 +202,22 @@
        (s/gen ::mx/square-matrix-finite))))
 
 (defn pos-definite-apache-matrix-finite?
-  "Returns true if a `::pos-definite-apache-matrix-finite`. Larger `accu`
-  creates more false negatives and less false positives."
+  "Tests if a matrix is positive definite with finite values.
+  
+  A positive definite matrix is symmetric with all positive eigenvalues.
+  Such matrices are invertible and have Cholesky decompositions. Used in
+  optimization, statistics, and defining valid covariance matrices.
+  
+  Parameters:
+    x - matrix to test
+    accu - accuracy threshold for eigenvalue positivity test
+  
+  Returns true if matrix is symmetric, finite, has positive eigenvalues,
+  admits Cholesky decomposition, and is invertible.
+  
+  Example:
+    (pos-definite-apache-matrix-finite?
+      (->apache-matrix [[2 1] [1 2]]) 1e-10) ;=> true"
   [x accu]
   (and (symmetric-apache-matrix? x)
     (apache-matrix-finite? x)
@@ -211,9 +241,21 @@
        (s/gen ::mx/square-matrix-finite))))
 
 (defn correlation-apache-matrix?
-  "Returns true if a `::pos-semidefinite-apache-matrix-finite` with a unit
-  diagonal. Larger `accu` creates more false negatives and less false
-  positives."
+  "Tests if a matrix is a valid correlation matrix.
+  
+  A correlation matrix must be positive semidefinite (valid covariance
+  structure) with unit diagonal elements (variables have unit variance).
+  Elements represent correlations between variables and must be in [-1, 1].
+  
+  Parameters:
+    x - matrix to test
+    accu - accuracy threshold for positive semidefinite test
+  
+  Returns true if matrix is positive semidefinite with 1.0 on diagonal.
+  
+  Example:
+    (correlation-apache-matrix?
+      (->apache-matrix [[1.0 0.5] [0.5 1.0]]) 1e-10) ;=> true"
   [x accu]
   (and (pos-semidefinite-apache-matrix-finite? x accu)
     (every? m/one? (diagonal x))))
@@ -238,7 +280,19 @@
     (Array2DRowRealMatrix. ^"[[D" (.getData ^RealMatrix block-apache-matrix))))
 
 (defn ->apache-matrix
-  "Returns a matrix using the Apache Commons matrix implementation."
+  "Converts a Clojure matrix to Apache Commons matrix implementation.
+  
+  Creates an Array2DRowRealMatrix from a nested vector matrix structure.
+  Handles empty matrices gracefully.
+  
+  Parameters:
+    m - nested vector matrix (e.g., [[1 2] [3 4]])
+  
+  Returns Apache Commons Array2DRowRealMatrix instance or nil for invalid input.
+  
+  Example:
+    (->apache-matrix [[1 2] [3 4]])
+    (->apache-matrix [[]]) ;=> empty matrix"
   [m]
   (if (mx/empty-matrix? m)
     (Array2DRowRealMatrix.)
@@ -249,7 +303,19 @@
   :ret (s/nilable ::apache-matrix))
 
 (defn apache-matrix->matrix
-  "Converts an Apache Commons matrix into a matrix."
+  "Converts Apache Commons matrix back to Clojure nested vector matrix.
+  
+  Extracts the underlying data from Apache Commons matrix and converts
+  to standard Clojure nested vector format.
+  
+  Parameters:
+    apache-m - Apache Commons matrix instance
+  
+  Returns nested vector matrix (e.g., [[1.0 2.0] [3.0 4.0]]).
+  
+  Example:
+    (def am (->apache-matrix [[1 2] [3 4]]))
+    (apache-matrix->matrix am) ;=> [[1.0 2.0] [3.0 4.0]]"
   [apache-m]
   (if (zero? (rows apache-m))
     [[]]
@@ -258,6 +324,12 @@
 (s/fdef apache-matrix->matrix
   :args (s/cat :apache-m ::apache-matrix)
   :ret ::mx/matrix)
+
+;;;APACHE MATRIX PRINTING
+(defmethod print-method Array2DRowRealMatrix
+  [apache-m ^java.io.Writer w]
+  (.write w "#apache-math/matrix ")
+  (print-method (apache-matrix->matrix apache-m) w))
 
 (defn pos-semidefinite-apache-matrix-finite-by-squaring
   "Returns a `::pos-semidefinite-apache-matrix-finite` by first
@@ -384,7 +456,15 @@
 
 ;;;MATRIX INFO
 (defn rows
-  "Returns the number of rows."
+  "Gets the number of rows in a matrix.
+  
+  Parameters:
+    apache-m - Apache Commons matrix
+  
+  Returns number of rows as integer.
+  
+  Example:
+    (rows (->apache-matrix [[1 2] [3 4] [5 6]])) ;=> 3"
   [apache-m]
   (.getRowDimension ^Array2DRowRealMatrix apache-m))
 
@@ -393,7 +473,15 @@
   :ret ::mx/rows)
 
 (defn columns
-  "Returns the number of columns."
+  "Gets the number of columns in a matrix.
+  
+  Parameters:
+    apache-m - Apache Commons matrix
+  
+  Returns number of columns as integer.
+  
+  Example:
+    (columns (->apache-matrix [[1 2 3] [4 5 6]])) ;=> 3"
   [apache-m]
   (.getColumnDimension ^Array2DRowRealMatrix apache-m))
 
@@ -402,7 +490,22 @@
   :ret ::mx/columns)
 
 (defn get-entry
-  "Returns the specified Apache Commons matrix element."
+  "Retrieves a single element from a matrix.
+  
+  Gets the element at the specified row and column position.
+  Uses zero-based indexing.
+  
+  Parameters:
+    apache-m - Apache Commons matrix
+    row - row index (0-based)
+    column - column index (0-based)
+  
+  Returns matrix element value or NaN if indices are out of bounds.
+  
+  Example:
+    (def m (->apache-matrix [[1 2] [3 4]]))
+    (get-entry m 0 1) ;=> 2.0
+    (get-entry m 1 0) ;=> 3.0"
   [apache-m row column]
   (try (.getEntry ^Array2DRowRealMatrix apache-m
          row
@@ -445,10 +548,23 @@
   :ret (s/nilable ::vector/vector))
 
 (defn diagonal
-  "Returns the specified diagonal of an Apache Commons matrix as a vector. If
-  'k'>0, returns a diagonal above the main diagonal. If 'k'<0, returns a
-  diagonal below the main diagonal. Works on both square and rectangular
-  matrices."
+  "Extracts a diagonal from a matrix as a vector.
+  
+  Returns elements from a diagonal line through the matrix. The main diagonal
+  (k=0) goes from top-left to bottom-right. Positive k values select diagonals
+  above the main diagonal, negative k values select diagonals below.
+  
+  Parameters:
+    apache-m - Apache Commons matrix
+    k - (optional) diagonal offset: 0=main, positive=above, negative=below
+  
+  Returns vector of diagonal elements.
+  
+  Example:
+    (def m (->apache-matrix [[1 2 3] [4 5 6] [7 8 9]]))
+    (diagonal m)   ;=> [1 5 9] (main diagonal)
+    (diagonal m 1) ;=> [2 6] (first super-diagonal)
+    (diagonal m -1) ;=> [4 8] (first sub-diagonal)"
   ([apache-m]
    (if (zero? (rows apache-m))
      []
@@ -475,8 +591,19 @@
   :ret ::vector/vector)
 
 (defn trace
-  "Calculates the trace of a square Apache Commons matrix (sum of elements on
-  main diagonal)."
+  "Calculates the trace of a square matrix.
+  
+  The trace is the sum of elements on the main diagonal (top-left to bottom-right).
+  Only defined for square matrices.
+  
+  Parameters:
+    square-apache-m - square Apache Commons matrix
+  
+  Returns sum of diagonal elements.
+  
+  Example:
+    (def m (->apache-matrix [[1 2] [3 4]]))
+    (trace m) ;=> 5.0 (1 + 4)"
   [square-apache-m]
   (.getTrace ^Array2DRowRealMatrix square-apache-m))
 
@@ -655,8 +782,18 @@
 
 ;;;MATRIX MANIPULATION
 (defn transpose
-  "Transposes an Apache Commons matrix by swapping rows and columns, returning a
-  new Apache Commons matrix."
+  "Transposes a matrix by swapping rows and columns.
+  
+  Creates a new matrix where element (i,j) becomes element (j,i).
+  
+  Parameters:
+    apache-m - Apache Commons matrix to transpose
+  
+  Returns new transposed matrix.
+  
+  Example:
+    (def m (->apache-matrix [[1 2 3] [4 5 6]]))
+    (transpose m) ;=> [[1 4] [2 5] [3 6]]"
   [apache-m]
   (if (zero? (rows apache-m))
     apache-m
@@ -805,8 +942,21 @@
   :ret boolean?)
 
 (defn mx*
-  "Apache Commons matrix multiplication. Number of columns of the first matrix
-  must match the number of rows of the second matrix."
+  "Performs matrix multiplication on Apache Commons matrices.
+  
+  Multiplies two or more matrices using standard linear algebra rules.
+  The number of columns in the first matrix must equal the number of
+  rows in the second matrix for each multiplication.
+  
+  Parameters:
+    apache-m1, apache-m2, ... - Apache Commons matrices to multiply
+  
+  Returns resulting matrix or nil if dimensions are incompatible.
+  
+  Example:
+    (def a (->apache-matrix [[1 2] [3 4]]))
+    (def b (->apache-matrix [[5 6] [7 8]]))
+    (mx* a b) ;=> [[19 22] [43 50]]"
   ([apache-m] apache-m)
   ([apache-m1 apache-m2]
    (when (= (columns apache-m1) (rows apache-m2))
@@ -826,7 +976,20 @@
   :ret (s/nilable ::apache-matrix))
 
 (defn add
-  "Apache Commons matrix addition."
+  "Performs element-wise addition of matrices.
+  
+  Adds corresponding elements of two or more matrices. All matrices
+  must have the same dimensions.
+  
+  Parameters:
+    apache-m1, apache-m2, ... - matrices to add (same dimensions required)
+  
+  Returns resulting sum matrix or nil if dimensions are incompatible.
+  
+  Example:
+    (def a (->apache-matrix [[1 2] [3 4]]))
+    (def b (->apache-matrix [[5 6] [7 8]]))
+    (add a b) ;=> [[6 8] [10 12]]"
   ([apache-m] apache-m)
   ([apache-m1 apache-m2]
    (if (and (zero? (rows apache-m1)) (zero? (rows apache-m2)))
@@ -895,8 +1058,20 @@
 (s/def ::inverse (s/nilable ::square-apache-matrix))
 
 (defn inverse
-  "Returns the inverse of a square Apache Commons matrix. Uses QR Decomposition
-  by default but will use other methods depending on matrix structure."
+  "Computes the inverse of a square matrix.
+  
+  Uses Apache Commons Math's adaptive inverse computation which selects
+  the most appropriate decomposition method (QR, LU, etc.) based on
+  matrix properties for optimal performance and numerical stability.
+  
+  Parameters:
+    square-apache-m - square Apache Commons matrix
+  
+  Returns inverse matrix or nil if matrix is singular (non-invertible).
+  
+  Example:
+    (def m (->apache-matrix [[2 0] [0 3]]))
+    (inverse m) ;=> [[0.5 0] [0 0.333...]]"
   [square-apache-m]
   (if (zero? (rows square-apache-m))
     square-apache-m
@@ -969,18 +1144,26 @@
 (s/def ::eigenvalues (s/nilable ::vector/vector))
 
 (defn eigen-decomposition
-  "Computes the Eigendecomposition of a diagonalisable matrix.
-   Returns a map containing:
-   `::eigenvectorsT` -- square Apache Commons matrix with each column containing
-     the eigenvectors
-   `::eigenvalues-matrix` -- Apache Commons matrix whose diagonal elements are
-     the eigenvalues, if they exist
-   `::eigenvalues` -- vector of real parts of eigenvalues (nil if imaginary
-     parts exist)
-   `::eigenvectors` -- square Apache Commons matrix with each row containing the
-     eigenvectors
-   `square-apache-m-finite` = `eigenvectorsT` × `eigenvalues-matrix` ×
-                               (inverse `eigenvectorsT`)."
+  "Computes eigenvalue decomposition of a square matrix.
+  
+  Finds eigenvalues and eigenvectors such that A * v = λ * v, where v is an
+  eigenvector and λ is the corresponding eigenvalue. The matrix is decomposed
+  as A = V * D * V^(-1), where V contains eigenvectors and D contains eigenvalues.
+  
+  Parameters:
+    square-apache-m-finite - square matrix with finite values
+  
+  Returns map with keys:
+    ::eigenvectorsT - matrix with eigenvectors as columns
+    ::eigenvalues-matrix - diagonal matrix of eigenvalues
+    ::eigenvalues - vector of real eigenvalues (nil if complex eigenvalues exist)
+    ::eigenvectors - matrix with eigenvectors as rows
+  
+  Returns anomaly map if decomposition fails.
+  
+  Example:
+    (eigen-decomposition (->apache-matrix [[3 1] [0 2]]))
+    ;=> eigenvalues [3.0 2.0], eigenvectors for 3×3 identity-like behavior"
   [square-apache-m-finite]
   (if (zero? (rows square-apache-m-finite))
     {::eigenvectorsT      square-apache-m-finite
@@ -1009,13 +1192,24 @@
 (s/def ::cholesky-L ::lower-triangular-apache-matrix)
 (s/def ::cholesky-LT ::upper-triangular-apache-matrix)
 (defn cholesky-decomposition
-  "Computes the Cholesky decomposition of a
-  `::pos-definite-apache-matrix-finite`. Returns a map of two Apache Commons
-  matrices `::cholesky-L` and `::choleskyLT`. This is the Cholesky square root
-  of a matrix, 'L' and 'LT' such that
-  ``::pos-definite-apache-matrix-finite` = L × LT. Note that
-  `::pos-definite-apache-matrix-finite` must be positive semidefinite for this
-  to exist, but [[cholesky-decomposition]] requires strict positivity."
+  "Computes Cholesky decomposition of a positive definite matrix.
+  
+  Decomposes a positive definite matrix A into A = L * L^T, where L is a
+  lower triangular matrix. This is the matrix square root operation and is
+  useful for solving linear systems and generating correlated random numbers.
+  
+  Parameters:
+    pos-definite-apache-m - positive definite matrix (symmetric with all positive eigenvalues)
+  
+  Returns map with keys:
+    ::cholesky-L - lower triangular matrix L
+    ::cholesky-LT - upper triangular matrix L^T (transpose of L)
+  
+  Returns anomaly map if matrix is not positive definite.
+  
+  Example:
+    (cholesky-decomposition (->apache-matrix [[4 2] [2 2]]))
+    ;=> L = [[2 0] [1 1]], L^T = [[2 1] [0 1]]"
   [pos-definite-apache-m]
   (if (zero? (rows pos-definite-apache-m))
     {::cholesky-L  pos-definite-apache-m
@@ -1211,11 +1405,22 @@
   :ret (s/keys :req [::Q ::R ::LLS-solution]))
 
 (defn qr-decomposition
-  "Computes the QR decomposition of an Apache Commons matrix. Returns a map
-  containing Apache Commons matrices Q and R:
-    `::Q` -- orthogonal factors
-    `::R` -- the upper triangular factors (not necessarily an upper triangular
-      Apache Commons matrix)."
+  "Computes QR decomposition of a matrix.
+  
+  Decomposes a matrix A into A = Q * R, where Q is an orthogonal matrix
+  (Q^T * Q = I) and R is an upper triangular matrix. Useful for solving
+  linear least squares problems and computing matrix rank.
+  
+  Parameters:
+    apache-m - matrix to decompose (any dimensions)
+  
+  Returns map with keys:
+    ::Q - orthogonal matrix (columns are orthonormal)
+    ::R - upper triangular matrix
+  
+  Example:
+    (qr-decomposition (->apache-matrix [[1 2] [3 4] [5 6]]))
+    ;=> Q has orthonormal columns, R is upper triangular"
   [apache-m]
   (if (zero? (rows apache-m))
     {::Q apache-m
