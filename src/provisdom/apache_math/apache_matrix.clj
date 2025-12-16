@@ -18,7 +18,6 @@
   (:require
     [clojure.spec.alpha :as s]
     [clojure.spec.gen.alpha :as gen]
-    [provisdom.math.arrays :as ar]
     [provisdom.math.core :as m]
     [provisdom.math.matrix :as mx]
     [provisdom.math.random :as random]
@@ -296,7 +295,7 @@
   [m]
   (if (mx/empty-matrix? m)
     (Array2DRowRealMatrix.)
-    (Array2DRowRealMatrix. ^"[[D" (ar/array2D :double m))))
+    (Array2DRowRealMatrix. ^"[[D" (into-array (map #(into-array Double/TYPE %) m)))))
 
 (s/fdef ->apache-matrix
   :args (s/cat :m ::mx/matrix)
