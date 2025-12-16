@@ -6,6 +6,7 @@
                                              :sha     "c4bcc1478fa8d866baff56ec1bf5c4bb353c5353"}}
  :aliases {:dev             {:extra-paths ["siderail"]}
            :local           {:override-deps {provisdom/math         {:local/root "../math"}
+                                             provisdom/test         {:local/root "../test"}
                                              provisdom/utility-belt {:local/root "../utility-belt"}}}
            :test            {:extra-paths ["test" "siderail"]
                              :extra-deps  {criterium/criterium        {:mvn/version "0.4.6"}
