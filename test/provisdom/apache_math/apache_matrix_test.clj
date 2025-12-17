@@ -15,7 +15,7 @@
 ;;;TYPES
 (deftest apache-matrix?-test
   (t/with-instrument `apache-mx/apache-matrix?
-    (is (t/spec-check apache-mx/apache-matrix?)))
+    (t/is-spec-check apache-mx/apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[]])))
     (is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1]])))
@@ -25,7 +25,7 @@
 
 (deftest empty-apache-matrix?-test
   (t/with-instrument `apache-mx/empty-apache-matrix?
-    (is (t/spec-check apache-mx/empty-apache-matrix?)))
+    (t/is-spec-check apache-mx/empty-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (t/is-not (apache-mx/empty-apache-matrix? []))
     (is (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[]])))
@@ -36,7 +36,7 @@
 
 (deftest apache-matrix-finite?-test
   (t/with-instrument `apache-mx/apache-matrix-finite?
-    (is (t/spec-check apache-mx/apache-matrix-finite?)))
+    (t/is-spec-check apache-mx/apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[]])))
     (is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[1]])))
@@ -49,7 +49,7 @@
 
 (deftest square-apache-matrix?-test
   (t/with-instrument `apache-mx/square-apache-matrix?
-    (is (t/spec-check apache-mx/square-apache-matrix?)))
+    (t/is-spec-check apache-mx/square-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1]])))
@@ -61,7 +61,7 @@
 
 (deftest diagonal-apache-matrix?-test
   (t/with-instrument `apache-mx/diagonal-apache-matrix?
-    (is (t/spec-check apache-mx/diagonal-apache-matrix?)))
+    (t/is-spec-check apache-mx/diagonal-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[1]])))
@@ -76,7 +76,7 @@
 
 (deftest upper-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/upper-triangular-apache-matrix?
-    (is (t/spec-check apache-mx/upper-triangular-apache-matrix?)))
+    (t/is-spec-check apache-mx/upper-triangular-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
@@ -95,7 +95,7 @@
 
 (deftest lower-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/lower-triangular-apache-matrix?
-    (is (t/spec-check apache-mx/lower-triangular-apache-matrix?)))
+    (t/is-spec-check apache-mx/lower-triangular-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
@@ -114,7 +114,7 @@
 
 (deftest symmetric-apache-matrix?-test
   (t/with-instrument `apache-mx/symmetric-apache-matrix?
-    (is (t/spec-check apache-mx/symmetric-apache-matrix?)))
+    (t/is-spec-check apache-mx/symmetric-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[1]])))
@@ -131,7 +131,7 @@
 
 (deftest pos-semidefinite-apache-matrix-finite?-test
   (t/with-instrument `apache-mx/pos-semidefinite-apache-matrix-finite?
-    (is (t/spec-check apache-mx/pos-semidefinite-apache-matrix-finite?)))
+    (t/is-spec-check apache-mx/pos-semidefinite-apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
@@ -172,7 +172,7 @@
 
 (deftest pos-definite-apache-matrix-finite?-test
   (t/with-instrument `apache-mx/pos-definite-apache-matrix-finite?
-    (is (t/spec-check apache-mx/pos-definite-apache-matrix-finite?)))
+    (t/is-spec-check apache-mx/pos-definite-apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
@@ -216,7 +216,7 @@
 
 (deftest correlation-apache-matrix?-test
   (t/with-instrument `apache-mx/correlation-apache-matrix?
-    (is (t/spec-check apache-mx/correlation-apache-matrix?)))
+    (t/is-spec-check apache-mx/correlation-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[]])
@@ -256,11 +256,11 @@
 ;;;CONSTRUCTORS
 (deftest ->apache-matrix-&-apache-matrix->matrix-test
   (t/with-instrument `apache-mx/->apache-matrix
-    (is (t/spec-check apache-mx/->apache-matrix)))
+    (t/is-spec-check apache-mx/->apache-matrix))
   (t/with-instrument `apache-mx/apache-matrix->matrix
-    (is (t/spec-check apache-mx/apache-matrix->matrix)))
+    (t/is-spec-check apache-mx/apache-matrix->matrix))
   (t/with-instrument (st/instrumentable-syms)
-    (is (t/spec-check apache-mx/apache-matrix->matrix))
+    (t/is-spec-check apache-mx/apache-matrix->matrix)
     (t/is= [[]]
       (apache-mx/apache-matrix->matrix (apache-mx/->apache-matrix [[]])))
     (t/is= [[1.0]]
@@ -292,7 +292,7 @@
 
 (deftest pos-definite-apache-matrix-finite-by-squaring-test
   (t/with-instrument `apache-mx/pos-definite-apache-matrix-finite-by-squaring
-    (is (t/spec-check apache-mx/pos-definite-apache-matrix-finite-by-squaring)))
+    (t/is-spec-check apache-mx/pos-definite-apache-matrix-finite-by-squaring))
   (t/with-instrument (st/instrumentable-syms)
     (t/is= (apache-mx/->apache-matrix [[]])
       (apache-mx/pos-definite-apache-matrix-finite-by-squaring
@@ -307,7 +307,7 @@
 
 (deftest correlation-apache-matrix-by-squaring-test
   (t/with-instrument `apache-mx/correlation-apache-matrix-by-squaring
-    (is (t/spec-check apache-mx/correlation-apache-matrix-by-squaring)))
+    (t/is-spec-check apache-mx/correlation-apache-matrix-by-squaring))
   (t/with-instrument (st/instrumentable-syms)
     (t/is= (apache-mx/->apache-matrix [[]])
       (apache-mx/correlation-apache-matrix-by-squaring
@@ -326,7 +326,7 @@
 
 (deftest rnd-pos-definite-apache-matrix-finite!-test
   (t/with-instrument `apache-mx/rnd-pos-definite-apache-matrix-finite!
-    (is (t/spec-check apache-mx/rnd-pos-definite-apache-matrix-finite!)))
+    (t/is-spec-check apache-mx/rnd-pos-definite-apache-matrix-finite!))
   (t/with-instrument (st/instrumentable-syms)
     (random/bind-seed 0
       (t/is= (apache-mx/->apache-matrix [[]])
@@ -342,7 +342,7 @@
 
 (deftest rnd-correlation-apache-matrix!-test
   (t/with-instrument `apache-mx/rnd-correlation-apache-matrix!
-    (is (t/spec-check apache-mx/rnd-correlation-apache-matrix!)))
+    (t/is-spec-check apache-mx/rnd-correlation-apache-matrix!))
   (t/with-instrument (st/instrumentable-syms)
     (random/bind-seed 0
       (t/is= (apache-mx/->apache-matrix [[]])
@@ -358,7 +358,7 @@
 ;;;INFO
 (deftest rows-test
   (t/with-instrument `apache-mx/rows
-    (is (t/spec-check apache-mx/rows)))
+    (t/is-spec-check apache-mx/rows))
   (t/with-instrument (st/instrumentable-syms)
     (t/is= 0 (apache-mx/rows (apache-mx/->apache-matrix [[]])))
     (t/is= 1 (apache-mx/rows (apache-mx/->apache-matrix [[1.0]])))
@@ -367,7 +367,7 @@
     (t/is= 2 (apache-mx/rows (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])))))
 
 (deftest columns-test
-  (is (t/spec-check apache-mx/columns))
+  (t/is-spec-check apache-mx/columns)
   (t/is= 0 (apache-mx/columns (apache-mx/->apache-matrix [[]])))
   (t/is= 1 (apache-mx/columns (apache-mx/->apache-matrix [[1.0]])))
   (t/is= 2 (apache-mx/columns (apache-mx/->apache-matrix [[1.0 2.0]])))
@@ -375,7 +375,7 @@
   (t/is= 2 (apache-mx/columns (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest get-entry-test
-  (is (t/spec-check apache-mx/get-entry))
+  (t/is-spec-check apache-mx/get-entry)
   (t/is= 1.0 (apache-mx/get-entry (apache-mx/->apache-matrix [[1.0]]) 0 0))
   (t/is= 2.0 (apache-mx/get-entry (apache-mx/->apache-matrix [[1.0 2.0]]) 0 1))
   (t/is= 4.0
@@ -384,7 +384,7 @@
       1)))
 
 (deftest get-row-test
-  (is (t/spec-check apache-mx/get-row))
+  (t/is-spec-check apache-mx/get-row)
   (t/is= [1.0] (apache-mx/get-row (apache-mx/->apache-matrix [[1.0]]) 0))
   (t/is= [2.0] (apache-mx/get-row (apache-mx/->apache-matrix [[1.0] [2.0]]) 1))
   (t/is= [1.0 0.5]
@@ -392,7 +392,7 @@
       0)))
 
 (deftest get-column-test
-  (is (t/spec-check apache-mx/get-column))
+  (t/is-spec-check apache-mx/get-column)
   (t/is= [1.0] (apache-mx/get-column (apache-mx/->apache-matrix [[1.0]]) 0))
   (t/is= [2.0] (apache-mx/get-column (apache-mx/->apache-matrix [[1.0 2.0]]) 1))
   (t/is= [1.0 2.0]
@@ -401,7 +401,7 @@
       0)))
 
 (deftest diagonal-test
-  (is (t/spec-check apache-mx/diagonal))
+  (t/is-spec-check apache-mx/diagonal)
   (t/is= [] (apache-mx/diagonal (apache-mx/->apache-matrix [[]])))
   (t/is= [1.0] (apache-mx/diagonal (apache-mx/->apache-matrix [[1.0]])))
   (t/is= [1.0] (apache-mx/diagonal (apache-mx/->apache-matrix [[1.0 2.0]])))
@@ -410,13 +410,13 @@
     (apache-mx/diagonal (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest trace-test
-  (is (t/spec-check apache-mx/trace))
+  (t/is-spec-check apache-mx/trace)
   (t/is= 0.0 (apache-mx/trace (apache-mx/->apache-matrix [[]])))
   (t/is= 1.0 (apache-mx/trace (apache-mx/->apache-matrix [[1]])))
   (t/is= 5.0 (apache-mx/trace (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest get-slices-as-matrix-test
-  (is (t/spec-check apache-mx/get-slices-as-matrix))
+  (t/is-spec-check apache-mx/get-slices-as-matrix)
   (t/is= (apache-mx/->apache-matrix [[1.0 0.5]])
     (apache-mx/get-slices-as-matrix
       (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])
@@ -483,7 +483,7 @@
                               [9.0 10.0 11.0 12.0] [13.0 14.0 15.0 16.0]]))
 
 (deftest matrix-partition-test
-  (is (t/spec-check apache-mx/matrix-partition))
+  (t/is-spec-check apache-mx/matrix-partition)
   (t/is= {::apache-mx/bottom-left  (apache-mx/->apache-matrix [[9.0 10.0]
                                                              [13.0 14.0]])
         ::apache-mx/bottom-right (apache-mx/->apache-matrix [[11.0 12.0]
@@ -548,7 +548,7 @@
     (apache-mx/matrix-partition s 4 4)))
 
 (deftest some-kv-test
-  (is (t/spec-check apache-mx/some-kv))
+  (t/is-spec-check apache-mx/some-kv)
   (t/is= 0.5
     (apache-mx/some-kv (fn [row column number]
                          (> (+ row column) number))
@@ -562,7 +562,7 @@
 
 ;;;MANIPULATION
 (deftest transpose-test
-  (is (t/spec-check apache-mx/transpose))
+  (t/is-spec-check apache-mx/transpose)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/transpose (apache-mx/->apache-matrix [[]])))
   (t/is= (apache-mx/->apache-matrix [[1.0]])
@@ -575,7 +575,7 @@
     (apache-mx/transpose (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest assoc-entry!-test
-  (is (t/spec-check apache-mx/assoc-entry!))
+  (t/is-spec-check apache-mx/assoc-entry!)
   (t/is= (apache-mx/->apache-matrix [[1.0]])
     (let [a (apache-mx/->apache-matrix [[0.0]])]
       (apache-mx/assoc-entry! a 0 0 1.0)
@@ -586,7 +586,7 @@
       a)))
 
 (deftest assoc-diagonal!-test
-  (is (t/spec-check apache-mx/assoc-diagonal!))
+  (t/is-spec-check apache-mx/assoc-diagonal!)
   (t/is= (apache-mx/->apache-matrix [[2.0]])
     (let [a (apache-mx/->apache-matrix [[0.0]])]
       (apache-mx/assoc-diagonal! a [2.0])
@@ -597,7 +597,7 @@
       a)))
 
 (deftest symmetric-apache-matrix-by-averaging!-test
-  (is (t/spec-check apache-mx/symmetric-apache-matrix-by-averaging!))
+  (t/is-spec-check apache-mx/symmetric-apache-matrix-by-averaging!)
   (t/is= (apache-mx/->apache-matrix [[0.0]])
     (let [a (apache-mx/->apache-matrix [[0.0]])]
       (apache-mx/symmetric-apache-matrix-by-averaging! a)
@@ -609,7 +609,7 @@
       a)))
 
 (deftest concat-rows-test
-  (is (t/spec-check apache-mx/concat-rows))
+  (t/is-spec-check apache-mx/concat-rows)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/concat-rows (apache-mx/->apache-matrix [[]])
       (apache-mx/->apache-matrix [[]])))
@@ -637,7 +637,7 @@
       (apache-mx/->apache-matrix [[1.0 0.5]]))))
 
 (deftest concat-columns-test
-  (is (t/spec-check apache-mx/concat-columns))
+  (t/is-spec-check apache-mx/concat-columns)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/concat-columns (apache-mx/->apache-matrix [[]])
       (apache-mx/->apache-matrix [[]])))
@@ -662,7 +662,7 @@
       (apache-mx/->apache-matrix [[1.0] [0.5]]))))
 
 (deftest correlation-apache-matrix->covariance-apache-matrix-test
-  (is (t/spec-check apache-mx/correlation-apache-matrix->covariance-apache-matrix
+  (t/is-spec-check apache-mx/correlation-apache-matrix->covariance-apache-matrix
         {:coll-check-limit 10
          :coll-error-limit 10
          :fspec-iterations 10
@@ -686,7 +686,7 @@
         [3.0 5.0]))))
 
 (deftest covariance-apache-matrix->correlation-apache-matrix-test
-  (is (t/spec-check apache-mx/covariance-apache-matrix->correlation-apache-matrix
+  (t/is-spec-check apache-mx/covariance-apache-matrix->correlation-apache-matrix
         {:coll-check-limit 10
          :coll-error-limit 10
          :fspec-iterations 10
@@ -707,7 +707,7 @@
 
 ;;;MATH
 (deftest ===-test
-  (is (t/spec-check apache-mx/===))
+  (t/is-spec-check apache-mx/===)
   (is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
         (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])))
   (is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
@@ -715,7 +715,7 @@
         (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]]))))
 
 (deftest mx*-test
-  (is (t/spec-check apache-mx/mx*))
+  (t/is-spec-check apache-mx/mx*)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/mx* (apache-mx/->apache-matrix [[]])
       (apache-mx/->apache-matrix [[]])))
@@ -737,7 +737,7 @@
       (apache-mx/->apache-matrix [[5.0 6.0] [7.0 8.0]]))))
 
 (deftest add-test
-  (is (t/spec-check apache-mx/add))
+  (t/is-spec-check apache-mx/add)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/add (apache-mx/->apache-matrix [[]])
       (apache-mx/->apache-matrix [[]])))
@@ -754,7 +754,7 @@
     (apache-mx/add (apache-mx/->apache-matrix [[1.0 2.0]]))))
 
 (deftest subtract-test
-  (is (t/spec-check apache-mx/subtract))
+  (t/is-spec-check apache-mx/subtract)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/subtract (apache-mx/->apache-matrix [[]])
       (apache-mx/->apache-matrix [[]])))
@@ -773,7 +773,7 @@
       (apache-mx/->apache-matrix [[1.0 0.5]]))))
 
 (deftest scalar-add-test
-  (is (t/spec-check apache-mx/scalar-add))
+  (t/is-spec-check apache-mx/scalar-add)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/scalar-add (apache-mx/->apache-matrix [[]]) 1.0))
   (t/is= (apache-mx/->apache-matrix [[2.0 1.5] [3.0 5.0]])
@@ -781,7 +781,7 @@
       1.0)))
 
 (deftest scalar-multiply-test
-  (is (t/spec-check apache-mx/scalar-multiply))
+  (t/is-spec-check apache-mx/scalar-multiply)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/scalar-multiply (apache-mx/->apache-matrix [[]]) 2.0))
   (t/is= (apache-mx/->apache-matrix [[2.0 1.0] [4.0 8.0]])
@@ -790,7 +790,7 @@
 
 ;;;DECOMPOSITION
 (deftest inverse-test
-  (is (t/spec-check apache-mx/inverse))
+  (t/is-spec-check apache-mx/inverse)
   (t/is= (apache-mx/->apache-matrix [[]])
     (apache-mx/inverse (apache-mx/->apache-matrix [[]])))
   (t/is= (apache-mx/->apache-matrix [[2.0]])
@@ -801,7 +801,7 @@
   (t/is= nil (apache-mx/inverse (apache-mx/->apache-matrix [[1 2] [1 2]]))))
 
 (deftest lu-decomposition-with-determinant-and-inverse-test
-  (is (t/spec-check apache-mx/lu-decomposition-with-determinant-and-inverse))
+  (t/is-spec-check apache-mx/lu-decomposition-with-determinant-and-inverse)
   (t/is= {::apache-mx/L              (apache-mx/->apache-matrix [[1.0]])
         ::apache-mx/U              (apache-mx/->apache-matrix [[4.0]])
         ::apache-mx/LU-permutation (apache-mx/->apache-matrix [[1.0]])
@@ -824,7 +824,7 @@
       (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest lu-decomposition-with-determinant-test
-  (is (t/spec-check apache-mx/lu-decomposition-with-determinant))
+  (t/is-spec-check apache-mx/lu-decomposition-with-determinant)
   (t/is= {::apache-mx/L              (apache-mx/->apache-matrix [[1.0]])
         ::apache-mx/U              (apache-mx/->apache-matrix [[2.0]])
         ::apache-mx/LU-permutation (apache-mx/->apache-matrix [[1.0]])
@@ -847,7 +847,7 @@
       (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]]))))
 
 (deftest eigen-decomposition-test
-  (is (t/spec-check apache-mx/eigen-decomposition))
+  (t/is-spec-check apache-mx/eigen-decomposition)
   (t/is= {::apache-mx/eigenvectorsT      (apache-mx/->apache-matrix [[]])
         ::apache-mx/eigenvalues-matrix (apache-mx/->apache-matrix [[]])
         ::apache-mx/eigenvalues        []
@@ -890,7 +890,7 @@
                                      [[1e100 0.0] [0.0 1e100]]))))
 
 (deftest cholesky-decomposition-test
-  (is (t/spec-check apache-mx/cholesky-decomposition
+  (t/is-spec-check apache-mx/cholesky-decomposition
         {:coll-check-limit 10
          :coll-error-limit 10
          :fspec-iterations 10
@@ -910,7 +910,7 @@
       (apache-mx/->apache-matrix [[1.0 0.5] [0.5 3.0]]))))
 
 (deftest rectangular-cholesky-decomposition-test
-  (is (t/spec-check apache-mx/rectangular-cholesky-decomposition
+  (t/is-spec-check apache-mx/rectangular-cholesky-decomposition
         {:coll-check-limit 10
          :coll-error-limit 10
          :fspec-iterations 10
@@ -947,7 +947,7 @@
       1e-14)))
 
 (deftest sv-decomposition-test
-  (is (t/spec-check apache-mx/sv-decomposition))
+  (t/is-spec-check apache-mx/sv-decomposition)
   (t/is= {::apache-mx/svd-left        (apache-mx/->apache-matrix [[]])
         ::apache-mx/singular-values (apache-mx/->apache-matrix [[]])
         ::apache-mx/svd-right       (apache-mx/->apache-matrix [[]])
@@ -1008,7 +1008,7 @@
     (apache-mx/sv-decomposition (apache-mx/->apache-matrix [[1.0] [0.5]]))))
 
 (deftest condition-test
-  (is (t/spec-check apache-mx/condition))
+  (t/is-spec-check apache-mx/condition)
   (is (m/nan? (apache-mx/condition (apache-mx/->apache-matrix [[]]))))
   (t/is= 1.0 (apache-mx/condition (apache-mx/->apache-matrix [[2.0]])))
   (t/is= 2.0
@@ -1017,7 +1017,7 @@
     (apache-mx/condition (apache-mx/->apache-matrix [[1.0 0.0] [0.0 4.0]]))))
 
 (deftest qr-decomposition-with-LLS-and-error-matrix-test
-  (is (t/spec-check apache-mx/qr-decomposition-with-LLS-and-error-matrix))
+  (t/is-spec-check apache-mx/qr-decomposition-with-LLS-and-error-matrix)
   (t/is= {::apache-mx/Q            (apache-mx/->apache-matrix [[]])
         ::apache-mx/R            (apache-mx/->apache-matrix [[]])
         ::apache-mx/LLS-solution (apache-mx/->apache-matrix [[]])
@@ -1067,7 +1067,7 @@
       (apache-mx/->apache-matrix [[7.0] [9.0]]))))
 
 (deftest qr-decomposition-with-linear-least-squares-test
-  (is (t/spec-check apache-mx/qr-decomposition-with-linear-least-squares))
+  (t/is-spec-check apache-mx/qr-decomposition-with-linear-least-squares)
   (t/is= {::apache-mx/Q            (apache-mx/->apache-matrix [[]])
         ::apache-mx/R            (apache-mx/->apache-matrix [[]])
         ::apache-mx/LLS-solution (apache-mx/->apache-matrix [[]])}
@@ -1082,7 +1082,7 @@
       (apache-mx/->apache-matrix [[7.0 9.0]]))))
 
 (deftest qr-decomposition-test
-  (is (t/spec-check apache-mx/qr-decomposition))
+  (t/is-spec-check apache-mx/qr-decomposition)
   (t/is= {::apache-mx/Q (apache-mx/->apache-matrix [[]])
         ::apache-mx/R (apache-mx/->apache-matrix [[]])}
     (apache-mx/qr-decomposition (apache-mx/->apache-matrix [[]])))
@@ -1109,7 +1109,7 @@
     (apache-mx/qr-decomposition (apache-mx/->apache-matrix [[2.0] [3.0]]))))
 
 (deftest rank-revealing-qr-decomposition-test
-  (is (t/spec-check apache-mx/rank-revealing-qr-decomposition))
+  (t/is-spec-check apache-mx/rank-revealing-qr-decomposition)
   (t/is= {::apache-mx/Q                (apache-mx/->apache-matrix [[]])
         ::apache-mx/R                (apache-mx/->apache-matrix [[]])
         ::apache-mx/RRQR-permutation (apache-mx/->apache-matrix [[]])

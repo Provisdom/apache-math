@@ -12,7 +12,7 @@
 ;;;TYPES
 (deftest apache-vector?-test
   (t/with-instrument `apache-v/apache-vector?
-    (is (t/spec-check apache-v/apache-vector?)))
+    (t/is-spec-check apache-v/apache-vector?))
   (t/with-instrument (st/instrumentable-syms)
     (is (apache-v/apache-vector? (apache-v/apache-vector [])))
     (is (apache-v/apache-vector? (apache-v/apache-vector [1])))
@@ -22,9 +22,9 @@
 ;;;CONSTRUCTORS
 (deftest apache-vector-&-apache-vector->vector-test
   (t/with-instrument `apache-v/apache-vector
-    (is (t/spec-check apache-v/apache-vector)))
+    (t/is-spec-check apache-v/apache-vector))
   (t/with-instrument `apache-v/apache-vector->vector
-    (is (t/spec-check apache-v/apache-vector->vector)))
+    (t/is-spec-check apache-v/apache-vector->vector))
   (t/with-instrument (st/instrumentable-syms)
     (t/is= [] (apache-v/apache-vector->vector (apache-v/apache-vector [])))
     (t/is= [1.0] (apache-v/apache-vector->vector (apache-v/apache-vector [1.0])))
