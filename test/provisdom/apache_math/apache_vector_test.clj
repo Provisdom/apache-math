@@ -14,8 +14,8 @@
   (t/with-instrument `apache-v/apache-vector?
     (t/is-spec-check apache-v/apache-vector?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-v/apache-vector? (apache-v/apache-vector [])))
-    (is (apache-v/apache-vector? (apache-v/apache-vector [1])))
+    (t/is (apache-v/apache-vector? (apache-v/apache-vector [])))
+    (t/is (apache-v/apache-vector? (apache-v/apache-vector [1])))
     (t/is-not (apache-v/apache-vector? "A"))
     (t/is-not (apache-v/apache-vector? [1 2]))))
 

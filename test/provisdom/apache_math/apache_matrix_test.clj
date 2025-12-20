@@ -17,9 +17,9 @@
   (t/with-instrument `apache-mx/apache-matrix?
     (t/is-spec-check apache-mx/apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1]])))
-    (is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1 2] [3 4]])))
+    (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1]])))
+    (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1 2] [3 4]])))
     (t/is-not (apache-mx/apache-matrix? "A"))
     (t/is-not (apache-mx/apache-matrix? [[1 2] [3 4]]))))
 
@@ -28,7 +28,7 @@
     (t/is-spec-check apache-mx/empty-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
     (t/is-not (apache-mx/empty-apache-matrix? []))
-    (is (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is-not (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/empty-apache-matrix? [[] [2]]))
     (t/is-not
@@ -38,8 +38,8 @@
   (t/with-instrument `apache-mx/apache-matrix-finite?
     (t/is-spec-check apache-mx/apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[1]])))
+    (t/is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[1]])))
     (t/is-not
       (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[m/inf+]])))
     (t/is-not (apache-mx/apache-matrix-finite?)
@@ -51,36 +51,36 @@
   (t/with-instrument `apache-mx/square-apache-matrix?
     (t/is-spec-check apache-mx/square-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1]])))
+    (t/is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1 1]])))
     (t/is-not
       (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1] [1]])))
-    (is (apache-mx/square-apache-matrix?
+    (t/is (apache-mx/square-apache-matrix?
           (apache-mx/->apache-matrix [[1 1] [1 1]])))))
 
 (ct/deftest diagonal-apache-matrix?-test
   (t/with-instrument `apache-mx/diagonal-apache-matrix?
     (t/is-spec-check apache-mx/diagonal-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[1]])))
+    (t/is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not
       (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[1 1]])))
     (t/is-not (apache-mx/diagonal-apache-matrix?)
               (apache-mx/->apache-matrix [[1] [1]]))
     (t/is-not (apache-mx/diagonal-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1] [1 1]]))
-    (is (apache-mx/diagonal-apache-matrix?
+    (t/is (apache-mx/diagonal-apache-matrix?
           (apache-mx/->apache-matrix [[1 0] [0 1]])))))
 
 (ct/deftest upper-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/upper-triangular-apache-matrix?
     (t/is-spec-check apache-mx/upper-triangular-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/upper-triangular-apache-matrix?
+    (t/is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/upper-triangular-apache-matrix?
+    (t/is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/upper-triangular-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1]]))
@@ -88,18 +88,18 @@
               (apache-mx/->apache-matrix [[1] [1]]))
     (t/is-not (apache-mx/upper-triangular-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1] [1 1]]))
-    (is (apache-mx/upper-triangular-apache-matrix?
+    (t/is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1 0] [0 1]])))
-    (is (apache-mx/upper-triangular-apache-matrix?
+    (t/is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1 1] [0 1]])))))
 
 (ct/deftest lower-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/lower-triangular-apache-matrix?
     (t/is-spec-check apache-mx/lower-triangular-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/lower-triangular-apache-matrix?
+    (t/is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/lower-triangular-apache-matrix?
+    (t/is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/lower-triangular-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1]]))
@@ -107,24 +107,24 @@
               (apache-mx/->apache-matrix [[1] [1]]))
     (t/is-not (apache-mx/lower-triangular-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1] [1 1]]))
-    (is (apache-mx/lower-triangular-apache-matrix?
+    (t/is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1 0] [0 1]])))
-    (is (apache-mx/lower-triangular-apache-matrix?
+    (t/is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[1 0] [1 1]])))))
 
 (ct/deftest symmetric-apache-matrix?-test
   (t/with-instrument `apache-mx/symmetric-apache-matrix?
     (t/is-spec-check apache-mx/symmetric-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[]])))
-    (is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[1]])))
+    (t/is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[]])))
+    (t/is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/symmetric-apache-matrix?)
               (apache-mx/->apache-matrix [[1 1]]))         ;?
     (t/is-not (apache-mx/symmetric-apache-matrix?)
               (apache-mx/->apache-matrix [[1] [1]]))
-    (is (apache-mx/symmetric-apache-matrix?
+    (t/is (apache-mx/symmetric-apache-matrix?
           (apache-mx/->apache-matrix [[1 1] [1 1]])))
-    (is (apache-mx/symmetric-apache-matrix?
+    (t/is (apache-mx/symmetric-apache-matrix?
           (apache-mx/->apache-matrix [[1 0] [0 1]])))
     (t/is-not (apache-mx/symmetric-apache-matrix?)
               (apache-mx/->apache-matrix [[1 0] [1 1]]))))
@@ -133,31 +133,31 @@
   (t/with-instrument `apache-mx/pos-semidefinite-apache-matrix-finite?
     (t/is-spec-check apache-mx/pos-semidefinite-apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/dbl-close))
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[0.0]])
           m/dbl-close))
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0]])
           m/dbl-close))
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[0.0 0.0] [0.0 0.0]])
           m/dbl-close))
     (t/is-not (apache-mx/pos-semidefinite-apache-matrix-finite?)
               (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])
               m/dbl-close)
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 0.5] [0.5 2.0]])
           m/dbl-close))
     (t/is-not (apache-mx/pos-semidefinite-apache-matrix-finite?)
               (apache-mx/->apache-matrix [[1.0 -1.1] [-1.1 1.0]])
               m/dbl-close)
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           m/dbl-close))
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 (m/next-down -1.0)]
                                       [(m/next-down -1.0) 1.0]])
           m/dbl-close))
@@ -165,7 +165,7 @@
               (apache-mx/->apache-matrix [[1.0 (+ -1.0 -1.0E-14)]
                                           [(+ -1.0 -1.0E-14) 1.0]])
               m/dbl-close)
-    (is (apache-mx/pos-semidefinite-apache-matrix-finite?
+    (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 (+ -1.0 -1.0E-14)]
                                       [(+ -1.0 -1.0E-14) 1.0]])
           m/sgl-close))))
@@ -174,13 +174,13 @@
   (t/with-instrument `apache-mx/pos-definite-apache-matrix-finite?
     (t/is-spec-check apache-mx/pos-definite-apache-matrix-finite?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/pos-definite-apache-matrix-finite?
+    (t/is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/sgl-close))
     (t/is-not (apache-mx/pos-definite-apache-matrix-finite?)
               (apache-mx/->apache-matrix [[0.0]])
               m/sgl-close)
-    (is (apache-mx/pos-definite-apache-matrix-finite?
+    (t/is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0]])
           m/sgl-close))
     (t/is-not (apache-mx/pos-definite-apache-matrix-finite?)
@@ -189,7 +189,7 @@
     (t/is-not (apache-mx/pos-definite-apache-matrix-finite?)
               (apache-mx/->apache-matrix [[1.0 0.5] [2.0 4.0]])
               m/sgl-close)
-    (is (apache-mx/pos-definite-apache-matrix-finite?
+    (t/is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[1.0 0.5] [0.5 1.0]])
           m/sgl-close))
     (t/is-not (apache-mx/pos-definite-apache-matrix-finite?)
@@ -218,13 +218,13 @@
   (t/with-instrument `apache-mx/correlation-apache-matrix?
     (t/is-spec-check apache-mx/correlation-apache-matrix?))
   (t/with-instrument (st/instrumentable-syms)
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[]])
           m/sgl-close))
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[1.0]])
           m/sgl-close))
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[1.0 0.2] [0.2 1.0]])
           m/sgl-close))
     (t/is-not (apache-mx/correlation-apache-matrix?)
@@ -239,17 +239,17 @@
     (t/is-not (apache-mx/correlation-apache-matrix?)
               (apache-mx/->apache-matrix [[1.0 -1.1] [-1.1 1.0]])
               m/sgl-close)
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           m/sgl-close))
     (t/is-not (apache-mx/correlation-apache-matrix?)
               (apache-mx/->apache-matrix [[(m/next-up 1.0) -1.0]
                                           [-1.0 (m/next-up 1.0)]])
               m/sgl-close)
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           m/sgl-close))
-    (is (apache-mx/correlation-apache-matrix?
+    (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[1.0 -1.0] [-1.0 1.0]])
           1e-40))))
 
@@ -707,9 +707,9 @@
 ;;;MATH
 (ct/deftest ===-test
   (t/is-spec-check apache-mx/===)
-  (is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
+  (t/is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
         (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])))
-  (is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
+  (t/is (apache-mx/=== (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
         (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]])
         (apache-mx/->apache-matrix [[1.0 0.5] [2.0 m/nan]]))))
 
@@ -1008,7 +1008,7 @@
 
 (ct/deftest condition-test
   (t/is-spec-check apache-mx/condition)
-  (is (m/nan? (apache-mx/condition (apache-mx/->apache-matrix [[]]))))
+  (t/is (m/nan? (apache-mx/condition (apache-mx/->apache-matrix [[]]))))
   (t/is= 1.0 (apache-mx/condition (apache-mx/->apache-matrix [[2.0]])))
   (t/is= 2.0
     (apache-mx/condition (apache-mx/->apache-matrix [[1.0 0.0] [0.0 2.0]])))
