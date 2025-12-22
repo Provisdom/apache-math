@@ -1,6 +1,5 @@
 (ns provisdom.apache-math.apache-matrix-test
   (:require
-    [clojure.spec.test.alpha :as st]
     [clojure.test :as ct]
     [provisdom.test.core :as t]
     [provisdom.apache-math.apache-matrix :as apache-mx]
@@ -16,7 +15,7 @@
 (ct/deftest apache-matrix?-test
   (t/with-instrument `apache-mx/apache-matrix?
     (t/is-spec-check apache-mx/apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is (apache-mx/apache-matrix? (apache-mx/->apache-matrix [[1 2] [3 4]])))
@@ -26,7 +25,7 @@
 (ct/deftest empty-apache-matrix?-test
   (t/with-instrument `apache-mx/empty-apache-matrix?
     (t/is-spec-check apache-mx/empty-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is-not (apache-mx/empty-apache-matrix? []))
     (t/is (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is-not (apache-mx/empty-apache-matrix? (apache-mx/->apache-matrix [[1]])))
@@ -37,7 +36,7 @@
 (ct/deftest apache-matrix-finite?-test
   (t/with-instrument `apache-mx/apache-matrix-finite?
     (t/is-spec-check apache-mx/apache-matrix-finite?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/apache-matrix-finite? (apache-mx/->apache-matrix [[1]])))
     (t/is-not
@@ -50,7 +49,7 @@
 (ct/deftest square-apache-matrix?-test
   (t/with-instrument `apache-mx/square-apache-matrix?
     (t/is-spec-check apache-mx/square-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/square-apache-matrix? (apache-mx/->apache-matrix [[1 1]])))
@@ -62,7 +61,7 @@
 (ct/deftest diagonal-apache-matrix?-test
   (t/with-instrument `apache-mx/diagonal-apache-matrix?
     (t/is-spec-check apache-mx/diagonal-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/diagonal-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not
@@ -77,7 +76,7 @@
 (ct/deftest upper-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/upper-triangular-apache-matrix?
     (t/is-spec-check apache-mx/upper-triangular-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/upper-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/upper-triangular-apache-matrix?
@@ -96,7 +95,7 @@
 (ct/deftest lower-triangular-apache-matrix?-test
   (t/with-instrument `apache-mx/lower-triangular-apache-matrix?
     (t/is-spec-check apache-mx/lower-triangular-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/lower-triangular-apache-matrix?
           (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/lower-triangular-apache-matrix?
@@ -115,7 +114,7 @@
 (ct/deftest symmetric-apache-matrix?-test
   (t/with-instrument `apache-mx/symmetric-apache-matrix?
     (t/is-spec-check apache-mx/symmetric-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[]])))
     (t/is (apache-mx/symmetric-apache-matrix? (apache-mx/->apache-matrix [[1]])))
     (t/is-not (apache-mx/symmetric-apache-matrix?)
@@ -132,7 +131,7 @@
 (ct/deftest pos-semidefinite-apache-matrix-finite?-test
   (t/with-instrument `apache-mx/pos-semidefinite-apache-matrix-finite?
     (t/is-spec-check apache-mx/pos-semidefinite-apache-matrix-finite?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/pos-semidefinite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/dbl-close))
@@ -173,7 +172,7 @@
 (ct/deftest pos-definite-apache-matrix-finite?-test
   (t/with-instrument `apache-mx/pos-definite-apache-matrix-finite?
     (t/is-spec-check apache-mx/pos-definite-apache-matrix-finite?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/pos-definite-apache-matrix-finite?
           (apache-mx/->apache-matrix [[]])
           m/sgl-close))
@@ -217,7 +216,7 @@
 (ct/deftest correlation-apache-matrix?-test
   (t/with-instrument `apache-mx/correlation-apache-matrix?
     (t/is-spec-check apache-mx/correlation-apache-matrix?))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is (apache-mx/correlation-apache-matrix?
           (apache-mx/->apache-matrix [[]])
           m/sgl-close))
@@ -259,7 +258,7 @@
     (t/is-spec-check apache-mx/->apache-matrix))
   (t/with-instrument `apache-mx/apache-matrix->matrix
     (t/is-spec-check apache-mx/apache-matrix->matrix))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is-spec-check apache-mx/apache-matrix->matrix)
     (t/is= [[]]
       (apache-mx/apache-matrix->matrix (apache-mx/->apache-matrix [[]])))
@@ -278,7 +277,7 @@
 (ct/deftest pos-semidefinite-apache-matrix-finite-by-squaring-test
   (t/with-instrument `apache-mx/pos-semidefinite-apache-matrix-finite-by-squaring
     (t/is-spec-check apache-mx/pos-semidefinite-apache-matrix-finite-by-squaring))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is= (apache-mx/->apache-matrix [[]])
       (apache-mx/pos-semidefinite-apache-matrix-finite-by-squaring
         (apache-mx/->apache-matrix [[]])))
@@ -292,7 +291,7 @@
 (ct/deftest pos-definite-apache-matrix-finite-by-squaring-test
   (t/with-instrument `apache-mx/pos-definite-apache-matrix-finite-by-squaring
     (t/is-spec-check apache-mx/pos-definite-apache-matrix-finite-by-squaring))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is= (apache-mx/->apache-matrix [[]])
       (apache-mx/pos-definite-apache-matrix-finite-by-squaring
         (apache-mx/->apache-matrix [[]])))
@@ -307,7 +306,7 @@
 (ct/deftest correlation-apache-matrix-by-squaring-test
   (t/with-instrument `apache-mx/correlation-apache-matrix-by-squaring
     (t/is-spec-check apache-mx/correlation-apache-matrix-by-squaring))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is= (apache-mx/->apache-matrix [[]])
       (apache-mx/correlation-apache-matrix-by-squaring
         (apache-mx/->apache-matrix [[]])))
@@ -326,7 +325,7 @@
 (ct/deftest rnd-pos-definite-apache-matrix-finite!-test
   (t/with-instrument `apache-mx/rnd-pos-definite-apache-matrix-finite!
     (t/is-spec-check apache-mx/rnd-pos-definite-apache-matrix-finite!))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (random/bind-seed 0
       (t/is= (apache-mx/->apache-matrix [[]])
         (apache-mx/rnd-pos-definite-apache-matrix-finite! 0)))
@@ -342,7 +341,7 @@
 (ct/deftest rnd-correlation-apache-matrix!-test
   (t/with-instrument `apache-mx/rnd-correlation-apache-matrix!
     (t/is-spec-check apache-mx/rnd-correlation-apache-matrix!))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (random/bind-seed 0
       (t/is= (apache-mx/->apache-matrix [[]])
         (apache-mx/rnd-correlation-apache-matrix! 0)))
@@ -358,7 +357,7 @@
 (ct/deftest rows-test
   (t/with-instrument `apache-mx/rows
     (t/is-spec-check apache-mx/rows))
-  (t/with-instrument (st/instrumentable-syms)
+  (t/with-instrument :all
     (t/is= 0 (apache-mx/rows (apache-mx/->apache-matrix [[]])))
     (t/is= 1 (apache-mx/rows (apache-mx/->apache-matrix [[1.0]])))
     (t/is= 1 (apache-mx/rows (apache-mx/->apache-matrix [[1.0 2.0]])))
